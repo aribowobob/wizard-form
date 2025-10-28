@@ -2,7 +2,7 @@ export interface BasicInfoEmployee {
   id: string;
   fullName: string;
   email: string;
-  department: number;
+  department: string;
   role: string;
 }
 

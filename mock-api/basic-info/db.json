@@ -4,53 +4,60 @@
       "id": "LEN-001",
       "fullName": "John Doe",
       "email": "john.doe@company.com",
-      "department": 1,
+      "department": "1",
       "role": "ENGINEER"
     },
     {
       "id": "OPS-001",
       "fullName": "Jane Smith",
       "email": "jane.smith@company.com",
-      "department": 3,
+      "department": "3",
       "role": "OPS"
     },
     {
       "id": "FUN-001",
       "fullName": "Michael Johnson",
       "email": "michael.johnson@company.com",
-      "department": 2,
+      "department": "2",
       "role": "ADMIN"
     },
     {
       "id": "ENG-001",
       "fullName": "Emily Brown",
       "email": "emily.brown@company.com",
-      "department": 4,
+      "department": "4",
       "role": "ENGINEER"
     },
     {
       "id": "LEN-002",
       "fullName": "David Wilson",
       "email": "david.wilson@company.com",
-      "department": 1,
+      "department": "1",
       "role": "FINANCE"
+    },
+    {
+      "id": "ENG-003",
+      "fullName": "Lorem Ipsum",
+      "email": "loremipsum@company.com",
+      "department": "4",
+      "role": "ENGINEER"
     }
   ],
   "departments": [
     {
-      "id": 1,
+      "id": "1",
       "name": "Lending"
     },
     {
-      "id": 2,
+      "id": "2",
       "name": "Funding"
     },
     {
-      "id": 3,
+      "id": "3",
       "name": "Operations"
     },
     {
-      "id": 4,
+      "id": "4",
       "name": "Engineering"
     }
   ]

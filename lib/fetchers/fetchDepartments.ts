@@ -1,9 +1,4 @@
 export interface Department {
-  id: number;
-  name: string;
-}
-
-interface DepartmentApiResponse {
   id: string;
   name: string;
 }
@@ -15,11 +10,5 @@ export async function fetchDepartments(): Promise<Department[]> {
     throw new Error("Failed to fetch departments");
   }
 
-  const data: DepartmentApiResponse[] = await response.json();
-
-  // Convert string IDs to numbers for consistency
-  return data.map((dept) => ({
-    ...dept,
-    id: parseInt(dept.id, 10),
-  }));
+  return response.json();
 }
