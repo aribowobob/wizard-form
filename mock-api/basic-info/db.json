@@ -1,0 +1,57 @@
+{
+  "employees": [
+    {
+      "id": "LEN-001",
+      "fullName": "John Doe",
+      "email": "john.doe@company.com",
+      "department": 1,
+      "role": "ENGINEER"
+    },
+    {
+      "id": "OPS-001",
+      "fullName": "Jane Smith",
+      "email": "jane.smith@company.com",
+      "department": 3,
+      "role": "OPS"
+    },
+    {
+      "id": "FUN-001",
+      "fullName": "Michael Johnson",
+      "email": "michael.johnson@company.com",
+      "department": 2,
+      "role": "ADMIN"
+    },
+    {
+      "id": "ENG-001",
+      "fullName": "Emily Brown",
+      "email": "emily.brown@company.com",
+      "department": 4,
+      "role": "ENGINEER"
+    },
+    {
+      "id": "LEN-002",
+      "fullName": "David Wilson",
+      "email": "david.wilson@company.com",
+      "department": 1,
+      "role": "FINANCE"
+    }
+  ],
+  "departments": [
+    {
+      "id": 1,
+      "name": "Lending"
+    },
+    {
+      "id": 2,
+      "name": "Funding"
+    },
+    {
+      "id": 3,
+      "name": "Operations"
+    },
+    {
+      "id": 4,
+      "name": "Engineering"
+    }
+  ]
+}

@@ -1,0 +1,53 @@
+{
+  "employeeDetails": [
+    {
+      "id": "LEN-001",
+      "photo": "https://i.pravatar.cc/150?img=1",
+      "employeeType": "FULL_TIME",
+      "officeLocation": 1,
+      "notes": "Experienced lending specialist with expertise in credit analysis. Strong team player and mentor."
+    },
+    {
+      "id": "OPS-001",
+      "photo": "https://i.pravatar.cc/150?img=5",
+      "employeeType": "FULL_TIME",
+      "officeLocation": 1,
+      "notes": "Operations specialist with 5+ years of experience. Excellent at process optimization and team coordination."
+    },
+    {
+      "id": "FUN-001",
+      "photo": "https://i.pravatar.cc/150?img=12",
+      "employeeType": "CONTRACT",
+      "officeLocation": 2,
+      "notes": "Funding administrator handling financial operations. Contract renewal pending."
+    },
+    {
+      "id": "ENG-001",
+      "photo": "https://i.pravatar.cc/150?img=9",
+      "employeeType": "FULL_TIME",
+      "officeLocation": 3,
+      "notes": "Software engineer specializing in backend systems and API development. Recently joined the team."
+    },
+    {
+      "id": "LEN-002",
+      "photo": "https://i.pravatar.cc/150?img=8",
+      "employeeType": "PART_TIME",
+      "officeLocation": 1,
+      "notes": "Financial analyst working part-time. Handles lending portfolio analysis and risk assessment."
+    }
+  ],
+  "locations": [
+    {
+      "id": 1,
+      "name": "Jakarta"
+    },
+    {
+      "id": 2,
+      "name": "Depok"
+    },
+    {
+      "id": 3,
+      "name": "Surabaya"
+    }
+  ]
+}
