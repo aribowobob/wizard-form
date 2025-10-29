@@ -1,15 +1,9 @@
-export interface PostBasicInfoPayload {
-  id: string;
-  fullName: string;
-  email: string;
-  department: string;
-  role: string;
-}
+import { EmployeeBasicInfo } from "@/definitions/types";
 
 export async function postBasicInfo(
-  payload: PostBasicInfoPayload
+  payload: EmployeeBasicInfo
 ): Promise<{ id: string }> {
-  const response = await fetch("http://localhost:4001/employees", {
+  const response = await fetch("http://localhost:4001/basicInfo", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

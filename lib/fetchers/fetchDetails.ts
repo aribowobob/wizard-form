@@ -1,13 +1,7 @@
-export interface EmployeeDetail {
-  id: string;
-  photo: string;
-  employeeType: string;
-  officeLocation: string;
-  notes: string;
-}
+import { EmployeeDetail } from "@/definitions/types";
 
 export async function fetchDetails(): Promise<EmployeeDetail[]> {
-  const response = await fetch("http://localhost:4002/employeeDetails");
+  const response = await fetch("http://localhost:4002/details");
 
   if (!response.ok) {
     throw new Error("Failed to fetch details");

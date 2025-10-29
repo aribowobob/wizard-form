@@ -1,5 +1,5 @@
 {
-  "employees": [
+  "basicInfo": [
     {
       "id": "LEN-001",
       "fullName": "John Doe",
@@ -8,39 +8,46 @@
       "role": "ENGINEER"
     },
     {
-      "id": "OPS-001",
-      "fullName": "Jane Smith",
-      "email": "jane.smith@company.com",
+      "id": "ENG-001",
+      "fullName": "Samuel Wilson",
+      "email": "samwil@company.com",
+      "department": "4",
+      "role": "ENGINEER"
+    },
+    {
+      "id": "OPE-001",
+      "fullName": "Whitney Barkely",
+      "email": "whitneybark@company.com",
       "department": "3",
       "role": "OPS"
     },
     {
-      "id": "FUN-001",
-      "fullName": "Michael Johnson",
-      "email": "michael.johnson@company.com",
-      "department": "2",
-      "role": "ADMIN"
+      "id": "OPE-002",
+      "fullName": "",
+      "email": "",
+      "department": "3",
+      "role": "OPS"
     },
     {
-      "id": "ENG-001",
-      "fullName": "Emily Brown",
-      "email": "emily.brown@company.com",
-      "department": "4",
-      "role": "ENGINEER"
+      "id": "OPE-003",
+      "fullName": "",
+      "email": "",
+      "department": "3",
+      "role": "OPS"
     },
     {
-      "id": "LEN-002",
-      "fullName": "David Wilson",
-      "email": "david.wilson@company.com",
-      "department": "1",
-      "role": "FINANCE"
+      "id": "OPE-004",
+      "fullName": "",
+      "email": "",
+      "department": "3",
+      "role": "OPS"
     },
     {
-      "id": "ENG-003",
-      "fullName": "Lorem Ipsum",
-      "email": "loremipsum@company.com",
-      "department": "4",
-      "role": "ENGINEER"
+      "id": "OPE-005",
+      "fullName": "",
+      "email": "",
+      "department": "3",
+      "role": "OPS"
     }
   ],
   "departments": [

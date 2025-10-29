@@ -10,6 +10,9 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { cn } from "@/lib/utils";
+import { BADGE_COLORS } from "@/definitions/constants";
+import { EmployeeRole } from "@/definitions/enums";
 
 export default function Home() {
   const {
@@ -41,11 +44,10 @@ export default function Home() {
   }
 
   return (
-    <div className="space-y-6">
-      <h1 className="text-3xl font-bold">Employee List</h1>
-
+    <div className="space-y-6 pt-10">
       {/* Add Button Row */}
-      <div className="flex items-center justify-end">
+      <div className="flex items-center justify-between">
+        <h1 className="text-3xl font-bold">Employee List</h1>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium flex items-center gap-2">
@@ -70,10 +72,7 @@ export default function Home() {
           <thead className="bg-gray-50 border-b">
             <tr>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Photo
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Name
+                Employee Profile
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Department
@@ -89,7 +88,7 @@ export default function Home() {
           <tbody className="bg-white divide-y divide-gray-200">
             {employees.length === 0 ? (
               <tr>
-                <td colSpan={5} className="px-6 py-8 text-center text-gray-500">
+                <td colSpan={4} className="px-6 py-8 text-center text-gray-500">
                   No employees found
                 </td>
               </tr>
@@ -97,29 +96,45 @@ export default function Home() {
               employees.map((employee) => (
                 <tr key={employee.id} className="hover:bg-gray-50">
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="relative w-10 h-10 rounded-full overflow-hidden">
-                      <Image
-                        src={employee.photo}
-                        alt={employee.fullName}
-                        width={40}
-                        height={40}
-                        className="object-cover"
-                      />
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm font-medium text-gray-900">
-                      {employee.fullName}
-                    </div>
-                    <div className="text-sm text-gray-500">
-                      {employee.email}
+                    <div className="flex items-start gap-4">
+                      <div className="relative w-10 h-10 rounded-full overflow-hidden">
+                        {employee.photo ? (
+                          <Image
+                            src={employee.photo}
+                            alt={employee.fullName}
+                            width={40}
+                            height={40}
+                            className="object-cover"
+                          />
+                        ) : (
+                          <div className="w-10 h-10 bg-gray-200 flex items-center justify-center text-gray-500">
+                            N/A
+                          </div>
+                        )}
+                      </div>
+                      <div>
+                        <p className="text-xs tracking-wider font-bold text-gray-500">
+                          {employee.id}
+                        </p>
+                        <p className="text-sm font-medium text-gray-900">
+                          {employee.fullName}
+                        </p>
+                        <p className="text-sm text-gray-500">
+                          {employee.email}
+                        </p>
+                      </div>
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                     {employee.department}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                    <span
+                      className={cn(
+                        "px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-slate-100 text-slate-800",
+                        BADGE_COLORS[employee.role as EmployeeRole]
+                      )}
+                    >
                       {employee.role}
                     </span>
                   </td>

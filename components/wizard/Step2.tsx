@@ -1,8 +1,7 @@
 "use client";
 
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
+import { UseFormReturn } from "react-hook-form";
+import { ChangeEvent } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -22,115 +21,62 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Combobox } from "@/components/ui/combobox";
-import { useDraftPersistence, Role } from "@/lib/hooks/useDraftPersistence";
-import { useQueryLocations } from "@/lib/hooks/useQueryLocations";
-import { ChangeEvent, useState } from "react";
+import { EmployeeType } from "@/definitions/enums";
 
-const detailsSchema = z.object({
-  photo: z.string().min(1, "Photo is required"),
-  employeeType: z.string().min(1, "Employment type is required"),
-  officeLocation: z.string().min(1, "Office location is required"),
-  notes: z.string(),
-});
-
-export type DetailsFormData = z.infer<typeof detailsSchema>;
+export { type DetailsFormData } from "@/lib/hooks/useWizard";
+import { DetailsFormData } from "@/lib/hooks/useWizard";
 
 interface Step2Props {
-  role: Role;
+  form: UseFormReturn<DetailsFormData>;
+  photoPreview: string;
+  hasDraftState: boolean;
   onSubmit: (data: DetailsFormData) => void;
+  onClearDraft: () => void;
+  onFileChange: (e: ChangeEvent<HTMLInputElement>) => void;
+  locationOptions: { value: string; label: string }[];
+  employmentTypeOptions: { value: EmployeeType; label: string }[];
   onBack?: () => void;
-  initialData?: DetailsFormData;
   isSubmitting?: boolean;
 }
 
 export function Step2({
-  role,
+  form,
+  photoPreview,
+  hasDraftState,
   onSubmit,
+  onClearDraft,
+  onFileChange,
+  locationOptions,
+  employmentTypeOptions,
   onBack,
-  initialData,
   isSubmitting = false,
 }: Step2Props) {
-  const [photoPreview, setPhotoPreview] = useState<string>(
-    initialData?.photo || ""
-  );
-  const { data: locations = [] } = useQueryLocations();
-
-  const form = useForm<DetailsFormData>({
-    resolver: zodResolver(detailsSchema),
-    defaultValues: initialData || {
-      photo: "",
-      employeeType: "",
-      officeLocation: "",
-      notes: "",
-    },
-  });
-
-  const { clearDraft, hasDraft } = useDraftPersistence({
-    form,
-    role,
-    onDraftLoad: (draft) => {
-      if (draft.photo) {
-        setPhotoPreview(draft.photo);
-      }
-    },
-  });
-
-  const hasDraftState = hasDraft();
-
-  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        const base64String = reader.result as string;
-        setPhotoPreview(base64String);
-        form.setValue("photo", base64String, { shouldValidate: true });
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
-  const handleClearDraft = () => {
-    clearDraft();
-    setPhotoPreview("");
-  };
-
-  const locationOptions = locations.map((loc) => ({
-    value: loc.id.toString(),
-    label: loc.name,
-  }));
-
-  const employmentTypes = [
-    { value: "Full Time", label: "Full Time" },
-    { value: "Part Time", label: "Part Time" },
-    { value: "Contract", label: "Contract" },
-    { value: "Intern", label: "Intern" },
-  ];
-
   return (
-    <div className="w-full max-w-2xl mx-auto p-6">
-      <div className="mb-6">
-        <h2 className="text-2xl font-bold mb-2">Step 2: Details & Submit</h2>
-        <p className="text-gray-600">
-          Complete the employee&apos;s details and submit
-        </p>
-      </div>
-
-      {hasDraftState && (
-        <div className="mb-4 p-4 bg-yellow-50 border border-yellow-200 rounded-md flex justify-between items-center">
-          <p className="text-sm text-yellow-800">
-            You have a saved draft for this form
+    <div className="w-full mx-auto p-6">
+      <div className="flex flex-col gap-6 md:flex-row mb-6">
+        <div className="grow">
+          <h2 className="text-2xl font-bold mb-1">Step 2: Details & Submit</h2>
+          <p className="text-gray-600 text-sm">
+            Complete the employee&apos;s details and submit
           </p>
-          <Button
-            type="button"
-            variant="outline"
-            size="sm"
-            onClick={handleClearDraft}
-          >
-            Clear Draft
-          </Button>
         </div>
-      )}
+
+        {hasDraftState && (
+          <div className="p-2 bg-yellow-50 border border-yellow-200 rounded-md flex justify-between items-center self-start gap-2">
+            <p className="text-sm text-yellow-800">
+              You have a saved draft for this form
+            </p>
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={onClearDraft}
+            >
+              Clear Draft
+            </Button>
+          </div>
+        )}
+      </div>
 
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
@@ -139,13 +85,11 @@ export function Step2({
             name="photo"
             render={() => (
               <FormItem>
-                <FormLabel>Photo</FormLabel>
+                <FormLabel>
+                  Photo <span className="text-red-500">*</span>
+                </FormLabel>
                 <FormControl>
-                  <Input
-                    type="file"
-                    accept="image/*"
-                    onChange={handleFileChange}
-                  />
+                  <Input type="file" accept="image/*" onChange={onFileChange} />
                 </FormControl>
                 {photoPreview && (
                   <div className="mt-2">
@@ -167,7 +111,9 @@ export function Step2({
             name="employeeType"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Employment Type</FormLabel>
+                <FormLabel>
+                  Employment Type <span className="text-red-500">*</span>
+                </FormLabel>
                 <Select
                   onValueChange={field.onChange}
                   defaultValue={field.value}
@@ -178,7 +124,7 @@ export function Step2({
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    {employmentTypes.map((type) => (
+                    {employmentTypeOptions.map((type) => (
                       <SelectItem key={type.value} value={type.value}>
                         {type.label}
                       </SelectItem>
@@ -195,7 +141,9 @@ export function Step2({
             name="officeLocation"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Office Location</FormLabel>
+                <FormLabel>
+                  Office Location <span className="text-red-500">*</span>
+                </FormLabel>
                 <FormControl>
                   <Combobox
                     options={locationOptions}

@@ -1,8 +1,6 @@
 "use client";
 
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
+import { UseFormReturn } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -13,95 +11,74 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Combobox } from "@/components/ui/combobox";
-import { useDraftPersistence, Role } from "@/lib/hooks/useDraftPersistence";
-import { useQueryDepartments } from "@/lib/hooks/useQueryDepartments";
+import { EmployeeRole } from "@/definitions/enums";
 
-const basicInfoSchema = z.object({
-  fullName: z.string().min(1, "Full name is required"),
-  email: z.string().email("Invalid email address"),
-  department: z.string().min(1, "Department is required"),
-  employeeId: z.string().min(1, "Employee ID is required"),
-});
-
-export type BasicInfoFormData = z.infer<typeof basicInfoSchema>;
+export { type BasicInfoFormData } from "@/lib/hooks/useWizard";
+import { BasicInfoFormData } from "@/lib/hooks/useWizard";
+import { ArrowRight } from "lucide-react";
 
 interface Step1Props {
-  role: Role;
-  onNext: (data: BasicInfoFormData) => void;
-  initialData?: BasicInfoFormData;
+  form: UseFormReturn<BasicInfoFormData>;
+  hasDraftState: boolean;
+  onSubmit: (data: BasicInfoFormData) => void;
+  onClearDraft: () => void;
+  departmentOptions: { value: string; label: string }[];
+  roleOptions: { value: EmployeeRole; label: string }[];
 }
 
-export function Step1({ role, onNext, initialData }: Step1Props) {
-  const { data: departments = [] } = useQueryDepartments();
-
-  const form = useForm<BasicInfoFormData>({
-    resolver: zodResolver(basicInfoSchema),
-    defaultValues: initialData || {
-      fullName: "",
-      email: "",
-      department: "",
-      employeeId: "",
-    },
-  });
-
-  const { clearDraft, hasDraft, storageKey } = useDraftPersistence({
-    form,
-    role,
-  });
-
-  const hasDraftState = hasDraft();
-
-  const handleSubmit = (data: BasicInfoFormData) => {
-    // Save to localStorage
-    if (typeof window !== "undefined") {
-      localStorage.setItem(storageKey, JSON.stringify(data));
-    }
-    onNext(data);
-  };
-
-  const handleClearDraft = () => {
-    clearDraft();
-  };
-
-  const departmentOptions = departments.map((dept) => ({
-    value: dept.id.toString(),
-    label: dept.name,
-  }));
-
+export function Step1({
+  form,
+  hasDraftState,
+  onSubmit,
+  onClearDraft,
+  departmentOptions,
+  roleOptions,
+}: Step1Props) {
   return (
-    <div className="w-full max-w-2xl mx-auto p-6">
-      <div className="mb-6">
-        <h2 className="text-2xl font-bold mb-2">Step 1: Basic Info</h2>
-        <p className="text-gray-600">
-          Enter the employee&apos;s basic information
-        </p>
+    <div className="w-full mx-auto p-6">
+      <div className="flex flex-col gap-6 md:flex-row mb-6">
+        <div className="grow">
+          <h2 className="text-2xl font-bold mb-1">Step 1: Basic Info</h2>
+          <p className="text-gray-600 text-sm">
+            Enter the employee&apos;s basic information
+          </p>
+        </div>
+
+        {hasDraftState && (
+          <div className="p-2 bg-yellow-50 border border-yellow-200 rounded-md flex justify-between items-center self-start gap-2">
+            <p className="text-xs text-yellow-800">
+              You have a saved draft for this form
+            </p>
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={onClearDraft}
+            >
+              Clear Draft
+            </Button>
+          </div>
+        )}
       </div>
 
-      {hasDraftState && (
-        <div className="mb-4 p-4 bg-yellow-50 border border-yellow-200 rounded-md flex justify-between items-center">
-          <p className="text-sm text-yellow-800">
-            You have a saved draft for this form
-          </p>
-          <Button
-            type="button"
-            variant="outline"
-            size="sm"
-            onClick={handleClearDraft}
-          >
-            Clear Draft
-          </Button>
-        </div>
-      )}
-
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
           <FormField
             control={form.control}
             name="fullName"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Full Name</FormLabel>
+                <FormLabel>
+                  Full Name <span className="text-red-500">*</span>
+                </FormLabel>
                 <FormControl>
                   <Input placeholder="Employee Full Name" {...field} />
                 </FormControl>
@@ -115,7 +92,9 @@ export function Step1({ role, onNext, initialData }: Step1Props) {
             name="email"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Email</FormLabel>
+                <FormLabel>
+                  Email <span className="text-red-500">*</span>
+                </FormLabel>
                 <FormControl>
                   <Input
                     type="email"
@@ -133,7 +112,9 @@ export function Step1({ role, onNext, initialData }: Step1Props) {
             name="department"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Department</FormLabel>
+                <FormLabel>
+                  Department <span className="text-red-500">*</span>
+                </FormLabel>
                 <FormControl>
                   <Combobox
                     options={departmentOptions}
@@ -151,12 +132,41 @@ export function Step1({ role, onNext, initialData }: Step1Props) {
 
           <FormField
             control={form.control}
-            name="employeeId"
+            name="role"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Employee ID</FormLabel>
+                <FormLabel>
+                  Employee Role <span className="text-red-500">*</span>
+                </FormLabel>
+                <Select onValueChange={field.onChange} value={field.value}>
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select employee role" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    {roleOptions.map((option) => (
+                      <SelectItem key={option.value} value={option.value}>
+                        {option.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="id"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>
+                  Employee ID <span className="text-red-500">*</span>
+                </FormLabel>
                 <FormControl>
-                  <Input placeholder="EMP001" {...field} />
+                  <Input placeholder="Auto generated!" {...field} readOnly />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -164,8 +174,9 @@ export function Step1({ role, onNext, initialData }: Step1Props) {
           />
 
           <div className="flex justify-end">
-            <Button type="submit" disabled={!form.formState.isValid}>
+            <Button type="submit">
               Next
+              <ArrowRight className="size-4" />
             </Button>
           </div>
         </form>

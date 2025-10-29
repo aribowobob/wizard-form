@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { UseFormReturn, FieldValues } from "react-hook-form";
 
 export type Role = "admin" | "ops";
@@ -20,6 +20,7 @@ export function useDraftPersistence<T extends FieldValues>({
 }: UseDraftPersistenceOptions<T>) {
   const timeoutRef = useRef<NodeJS.Timeout | undefined>(undefined);
   const storageKey = `draft_${role}`;
+  const [hasDraftState, setHasDraftState] = useState(false);
 
   // Load draft on mount
   useEffect(() => {
@@ -29,6 +30,7 @@ export function useDraftPersistence<T extends FieldValues>({
         try {
           const parsedDraft = JSON.parse(savedDraft);
           form.reset(parsedDraft);
+          setHasDraftState(true);
           if (onDraftLoad) {
             onDraftLoad(parsedDraft);
           }
@@ -50,6 +52,7 @@ export function useDraftPersistence<T extends FieldValues>({
       timeoutRef.current = setTimeout(() => {
         if (typeof window !== "undefined") {
           localStorage.setItem(storageKey, JSON.stringify(formData));
+          setHasDraftState(true);
         }
       }, debounceMs);
     });
@@ -66,14 +69,12 @@ export function useDraftPersistence<T extends FieldValues>({
     if (typeof window !== "undefined") {
       localStorage.removeItem(storageKey);
       form.reset();
+      setHasDraftState(false);
     }
   };
 
   const hasDraft = () => {
-    if (typeof window !== "undefined") {
-      return localStorage.getItem(storageKey) !== null;
-    }
-    return false;
+    return hasDraftState;
   };
 
   return { clearDraft, hasDraft, storageKey };
