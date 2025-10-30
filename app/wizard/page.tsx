@@ -24,6 +24,7 @@ function WizardContent() {
     roleOptions,
     isDepartmentsLoading,
     handleDepartmentSearch,
+    formKey,
     detailsForm,
     photoPreview,
     hasDetailsDraftState,
@@ -35,6 +36,7 @@ function WizardContent() {
     handleStep2Submit,
     isLocationsLoading,
     handleLocationSearch,
+    fileInputKey,
     isSubmitting,
     isError,
     loadingMessage,
@@ -67,6 +69,7 @@ function WizardContent() {
             roleOptions={roleOptions}
             isDepartmentsLoading={isDepartmentsLoading}
             onDepartmentSearch={handleDepartmentSearch}
+            formKey={formKey}
           />
         )}
 
@@ -85,6 +88,8 @@ function WizardContent() {
             isLocationsLoading={isLocationsLoading}
             onLocationSearch={handleLocationSearch}
             loadingMessage={loadingMessage}
+            fileInputKey={fileInputKey}
+            formKey={formKey}
           />
         )}
       </div>

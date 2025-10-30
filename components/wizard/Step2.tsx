@@ -40,6 +40,8 @@ interface Step2Props {
   isLocationsLoading?: boolean;
   onLocationSearch: (search: string) => void;
   loadingMessage?: string;
+  fileInputKey?: number;
+  formKey?: number;
 }
 
 export function Step2({
@@ -56,6 +58,8 @@ export function Step2({
   isLocationsLoading = false,
   onLocationSearch,
   loadingMessage = "",
+  fileInputKey = 0,
+  formKey = 0,
 }: Step2Props) {
   return (
     <div className="w-full mx-auto p-6">
@@ -95,7 +99,12 @@ export function Step2({
                   Photo <span className="text-red-500">*</span>
                 </FormLabel>
                 <FormControl>
-                  <Input type="file" accept="image/*" onChange={onFileChange} />
+                  <Input
+                    key={fileInputKey}
+                    type="file"
+                    accept="image/*"
+                    onChange={onFileChange}
+                  />
                 </FormControl>
                 {photoPreview && (
                   <div className="mt-2">
@@ -121,8 +130,9 @@ export function Step2({
                   Employment Type <span className="text-red-500">*</span>
                 </FormLabel>
                 <Select
+                  key={formKey}
                   onValueChange={field.onChange}
-                  defaultValue={field.value}
+                  value={field.value}
                 >
                   <FormControl>
                     <SelectTrigger>

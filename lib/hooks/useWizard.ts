@@ -56,6 +56,8 @@ export function useWizard({
   const [locationSearch, setLocationSearch] = useState<string>("");
   const [loadingMessage, setLoadingMessage] = useState<string>("");
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
+  const [fileInputKey, setFileInputKey] = useState<number>(0);
+  const [formKey, setFormKey] = useState<number>(0);
 
   const { data: departments = [], isLoading: isDepartmentsLoading } =
     useQueryDepartments(departmentSearch);
@@ -142,6 +144,14 @@ export function useWizard({
 
   const handleClearDraft = () => {
     clearDraft();
+    setFormKey((prev) => prev + 1); // Force selects to re-render
+    form.reset({
+      fullName: "",
+      email: "",
+      department: "",
+      id: "",
+      role: undefined,
+    });
   };
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -160,6 +170,14 @@ export function useWizard({
   const handleClearDetailsDraft = () => {
     clearDetailsDraft();
     setPhotoPreview("");
+    setFileInputKey((prev) => prev + 1); // Force file input to re-render and clear
+    setFormKey((prev) => prev + 1); // Force selects to re-render
+    detailsForm.reset({
+      photo: "",
+      employeeType: undefined,
+      officeLocation: "",
+      notes: "",
+    });
   };
 
   const departmentOptions = departments.map((dept) => ({
@@ -310,6 +328,7 @@ export function useWizard({
     roleOptions,
     isDepartmentsLoading,
     handleDepartmentSearch,
+    formKey,
     // Step 2
     detailsForm,
     photoPreview,
@@ -322,6 +341,7 @@ export function useWizard({
     handleStep2Submit,
     isLocationsLoading,
     handleLocationSearch,
+    fileInputKey,
     // Common
     isSubmitting:
       submitBasicInfo.isPending || submitDetails.isPending || isProcessing,

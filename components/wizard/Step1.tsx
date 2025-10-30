@@ -34,6 +34,7 @@ interface Step1Props {
   roleOptions: { value: EmployeeRole; label: string }[];
   isDepartmentsLoading?: boolean;
   onDepartmentSearch: (search: string) => void;
+  formKey?: number;
 }
 
 export function Step1({
@@ -45,6 +46,7 @@ export function Step1({
   roleOptions,
   isDepartmentsLoading = false,
   onDepartmentSearch,
+  formKey = 0,
 }: Step1Props) {
   return (
     <div className="w-full mx-auto p-6">
@@ -144,7 +146,11 @@ export function Step1({
                 <FormLabel>
                   Employee Role <span className="text-red-500">*</span>
                 </FormLabel>
-                <Select onValueChange={field.onChange} value={field.value}>
+                <Select
+                  key={formKey}
+                  onValueChange={field.onChange}
+                  value={field.value}
+                >
                   <FormControl>
                     <SelectTrigger>
                       <SelectValue placeholder="Select employee role" />
