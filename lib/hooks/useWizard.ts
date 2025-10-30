@@ -54,6 +54,8 @@ export function useWizard({
   );
   const [departmentSearch, setDepartmentSearch] = useState<string>("");
   const [locationSearch, setLocationSearch] = useState<string>("");
+  const [loadingMessage, setLoadingMessage] = useState<string>("");
+  const [isProcessing, setIsProcessing] = useState<boolean>(false);
 
   const { data: departments = [], isLoading: isDepartmentsLoading } =
     useQueryDepartments(departmentSearch);
@@ -225,23 +227,49 @@ export function useWizard({
     }
 
     try {
-      // Submit basic info first
-      await submitBasicInfo.mutateAsync({
-        id: basicInfo.id,
-        fullName: basicInfo.fullName,
-        email: basicInfo.email,
-        department: basicInfo.department,
-        role: basicInfo.role,
-      });
+      setIsProcessing(true);
 
-      // Then submit details
-      await submitDetails.mutateAsync({
-        id: basicInfo.id,
-        photo: detailsData.photo,
-        employeeType: detailsData.employeeType,
-        officeLocation: detailsData.officeLocation,
-        notes: detailsData.notes,
-      });
+      // Show "Submitting basicInfo.." message
+      setLoadingMessage("Submitting basicInfo..");
+
+      // Submit basic info
+      await Promise.all([
+        submitBasicInfo.mutateAsync({
+          id: basicInfo.id,
+          fullName: basicInfo.fullName,
+          email: basicInfo.email,
+          department: basicInfo.department,
+          role: basicInfo.role,
+        }),
+        new Promise((resolve) => setTimeout(resolve, 1000)),
+      ]);
+
+      // Show success message "basicInfo saved!"
+      setLoadingMessage("basicInfo saved!");
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
+      // Show "Submitting details.." message
+      setLoadingMessage("Submitting details..");
+
+      // Submit details (3s delay)
+      await Promise.all([
+        submitDetails.mutateAsync({
+          id: basicInfo.id,
+          photo: detailsData.photo,
+          employeeType: detailsData.employeeType,
+          officeLocation: detailsData.officeLocation,
+          notes: detailsData.notes,
+        }),
+        new Promise((resolve) => setTimeout(resolve, 1000)),
+      ]);
+
+      // Show success message "details saved!"
+      setLoadingMessage("details saved!");
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
+      // Show final success message
+      setLoadingMessage("All data processed successfully!");
+      await new Promise((resolve) => setTimeout(resolve, 2000));
 
       // Clear localStorage drafts for the role
       if (typeof window !== "undefined") {
@@ -253,6 +281,8 @@ export function useWizard({
     } catch (error) {
       // Errors will be handled by the mutation error states
       console.error("Error submitting form:", error);
+      setLoadingMessage("");
+      setIsProcessing(false);
     }
   };
 
@@ -293,8 +323,10 @@ export function useWizard({
     isLocationsLoading,
     handleLocationSearch,
     // Common
-    isSubmitting: submitBasicInfo.isPending || submitDetails.isPending,
+    isSubmitting:
+      submitBasicInfo.isPending || submitDetails.isPending || isProcessing,
     isError: submitBasicInfo.isError || submitDetails.isError,
+    loadingMessage,
     // Back to list
     handleBackToList,
   };

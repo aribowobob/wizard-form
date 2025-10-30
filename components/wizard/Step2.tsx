@@ -39,6 +39,7 @@ interface Step2Props {
   isSubmitting?: boolean;
   isLocationsLoading?: boolean;
   onLocationSearch: (search: string) => void;
+  loadingMessage?: string;
 }
 
 export function Step2({
@@ -54,6 +55,7 @@ export function Step2({
   isSubmitting = false,
   isLocationsLoading = false,
   onLocationSearch,
+  loadingMessage = "",
 }: Step2Props) {
   return (
     <div className="w-full mx-auto p-6">
@@ -186,7 +188,12 @@ export function Step2({
 
           <div className="flex justify-between">
             {onBack && (
-              <Button type="button" variant="outline" onClick={onBack}>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={onBack}
+                disabled={isSubmitting}
+              >
                 Back
               </Button>
             )}
@@ -194,6 +201,14 @@ export function Step2({
               {isSubmitting ? "Submitting..." : "Submit"}
             </Button>
           </div>
+
+          {loadingMessage && (
+            <div className="p-4 bg-blue-50 border border-blue-200 rounded-md">
+              <p className="text-sm text-blue-800 text-center font-medium">
+                {loadingMessage}
+              </p>
+            </div>
+          )}
         </form>
       </Form>
     </div>

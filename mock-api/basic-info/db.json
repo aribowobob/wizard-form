@@ -20,34 +20,6 @@
       "email": "whitneybark@company.com",
       "department": "3",
       "role": "OPS"
-    },
-    {
-      "id": "OPE-002",
-      "fullName": "",
-      "email": "",
-      "department": "3",
-      "role": "OPS"
-    },
-    {
-      "id": "OPE-003",
-      "fullName": "",
-      "email": "",
-      "department": "3",
-      "role": "OPS"
-    },
-    {
-      "id": "OPE-004",
-      "fullName": "",
-      "email": "",
-      "department": "3",
-      "role": "OPS"
-    },
-    {
-      "id": "OPE-005",
-      "fullName": "",
-      "email": "",
-      "department": "3",
-      "role": "OPS"
     }
   ],
   "departments": [

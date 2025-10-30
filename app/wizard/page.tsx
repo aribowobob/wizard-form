@@ -37,6 +37,7 @@ function WizardContent() {
     handleLocationSearch,
     isSubmitting,
     isError,
+    loadingMessage,
     handleBackToList,
   } = useWizard({ role });
 
@@ -83,6 +84,7 @@ function WizardContent() {
             isSubmitting={isSubmitting}
             isLocationsLoading={isLocationsLoading}
             onLocationSearch={handleLocationSearch}
+            loadingMessage={loadingMessage}
           />
         )}
       </div>
