@@ -58,12 +58,12 @@ Base URL: `http://localhost:4001`
 
 | Method | Endpoint         | Description             |
 | ------ | ---------------- | ----------------------- |
-| GET    | `/employees`     | Get all employees       |
-| GET    | `/employees/:id` | Get employee by ID      |
-| POST   | `/employees`     | Create new employee     |
-| PUT    | `/employees/:id` | Update employee         |
-| PATCH  | `/employees/:id` | Partial update employee |
-| DELETE | `/employees/:id` | Delete employee         |
+| GET    | `/basicInfo`     | Get all employees       |
+| GET    | `/basicInfo/:id` | Get employee by ID      |
+| POST   | `/basicInfo`     | Create new employee     |
+| PUT    | `/basicInfo/:id` | Update employee         |
+| PATCH  | `/basicInfo/:id` | Partial update employee |
+| DELETE | `/basicInfo/:id` | Delete employee         |
 
 **Employee Basic Info Schema:**
 
@@ -72,18 +72,18 @@ Base URL: `http://localhost:4001`
   "id": "ENG-001",
   "fullName": "John Doe",
   "email": "john.doe@company.com",
-  "department": 1,
+  "department": "4",
   "role": "ENGINEER"
 }
 ```
 
 **Fields:**
 
-- `id` (string): Employee ID in format `<DEPT_CODE>-<SEQ>` (e.g., ENG-001, OPS-001)
+- `id` (string): Employee ID in format `<DEPT_CODE>-<SEQ>` (e.g., ENG-001, LEN-001, OPE-001, FUN-001)
 - `fullName` (string): Employee's full name
 - `email` (string): Employee's email address
-- `department` (number): Department ID (reference to departments endpoint)
-- `role` (enum): Employee role - `OPS`, `ADMIN`, `ENGINEER`, or `FINANCE`
+- `department` (string): Department ID (reference to departments endpoint)
+- `role` (enum): Employee role - `ADMIN`, `OPS`, `ENGINEER`, or `FINANCE`
 
 **Additional Endpoints:**
 
@@ -97,30 +97,30 @@ Base URL: `http://localhost:4001`
 
 ```json
 {
-  "id": 1,
+  "id": "1",
   "name": "Lending"
 }
 ```
 
 **Available Departments:**
 
-- Lending (ID: 1)
-- Funding (ID: 2)
-- Operations (ID: 3)
-- Engineering (ID: 4)
+- Lending (ID: "1") - Prefix: LEN
+- Funding (ID: "2") - Prefix: FUN
+- Operations (ID: "3") - Prefix: OPE
+- Engineering (ID: "4") - Prefix: ENG
 
 ### Details API (Port 4002)
 
 Base URL: `http://localhost:4002`
 
-| Method | Endpoint               | Description                 |
-| ------ | ---------------------- | --------------------------- |
-| GET    | `/employeeDetails`     | Get all employee details    |
-| GET    | `/employeeDetails/:id` | Get employee details by ID  |
-| POST   | `/employeeDetails`     | Create new employee details |
-| PUT    | `/employeeDetails/:id` | Update employee details     |
-| PATCH  | `/employeeDetails/:id` | Partial update details      |
-| DELETE | `/employeeDetails/:id` | Delete employee details     |
+| Method | Endpoint       | Description                 |
+| ------ | -------------- | --------------------------- |
+| GET    | `/details`     | Get all employee details    |
+| GET    | `/details/:id` | Get employee details by ID  |
+| POST   | `/details`     | Create new employee details |
+| PUT    | `/details/:id` | Update employee details     |
+| PATCH  | `/details/:id` | Partial update details      |
+| DELETE | `/details/:id` | Delete employee details     |
 
 **Employee Details Schema:**
 
@@ -129,17 +129,17 @@ Base URL: `http://localhost:4002`
   "id": "ENG-001",
   "photo": "https://i.pravatar.cc/150?img=1",
   "employeeType": "FULL_TIME",
-  "officeLocation": 1,
+  "officeLocation": "1",
   "notes": "Experienced software engineer with expertise in full-stack development."
 }
 ```
 
 **Fields:**
 
-- `id` (string): Employee ID in format `<DEPT_CODE>-<SEQ>` (e.g., ENG-001, OPS-001)
-- `photo` (string): URL to employee photo
+- `id` (string): Employee ID in format `<DEPT_CODE>-<SEQ>` (e.g., ENG-001, LEN-001)
+- `photo` (string): Base64 encoded image or URL to employee photo
 - `employeeType` (enum): Employment type - `FULL_TIME`, `PART_TIME`, `CONTRACT`, or `INTERN`
-- `officeLocation` (number): Office location ID (reference to officeLocations endpoint)
+- `officeLocation` (string): Office location ID (reference to locations endpoint)
 - `notes` (string): Additional notes about the employee
 
 **Additional Endpoints:**
@@ -154,63 +154,63 @@ Base URL: `http://localhost:4002`
 
 ```json
 {
-  "id": 1,
+  "id": "1",
   "name": "Jakarta"
 }
 ```
 
 **Available Locations:**
 
-- Jakarta (ID: 1)
-- Depok (ID: 2)
-- Surabaya (ID: 3)
+- Jakarta (ID: "1")
+- Depok (ID: "2")
+- Surabaya (ID: "3")
 
 ## Example API Usage
 
 ```bash
 # Get all employees (Basic Info)
-curl http://localhost:4001/employees
+curl http://localhost:4001/basicInfo
 
 # Get specific employee (Basic Info)
-curl http://localhost:4001/employees/LEN-001
+curl http://localhost:4001/basicInfo/LEN-001
 
 # Get all departments
 curl http://localhost:4001/departments
 
-# Search departments by name (autocomplete)
+# Search departments by name (autocomplete with 500ms debounce)
 curl "http://localhost:4001/departments?name_like=Lend"
 
 # Get all employee details
-curl http://localhost:4002/employeeDetails
+curl http://localhost:4002/details
 
 # Get details for specific employee
-curl http://localhost:4002/employeeDetails/LEN-001
+curl http://localhost:4002/details/LEN-001
 
 # Get all locations
 curl http://localhost:4002/locations
 
-# Search locations by name (autocomplete)
+# Search locations by name (autocomplete with 500ms debounce)
 curl "http://localhost:4002/locations?name_like=Jak"
 
 # Create new employee (Basic Info)
-curl -X POST http://localhost:4001/employees \
+curl -X POST http://localhost:4001/basicInfo \
   -H "Content-Type: application/json" \
   -d '{
     "id": "ENG-002",
     "fullName": "Alice Anderson",
     "email": "alice.anderson@company.com",
-    "department": 4,
+    "department": "4",
     "role": "ENGINEER"
   }'
 
 # Create employee details
-curl -X POST http://localhost:4002/employeeDetails \
+curl -X POST http://localhost:4002/details \
   -H "Content-Type: application/json" \
   -d '{
     "id": "ENG-002",
-    "photo": "https://i.pravatar.cc/150?img=15",
+    "photo": "data:image/jpeg;base64,...",
     "employeeType": "FULL_TIME",
-    "officeLocation": 1,
+    "officeLocation": "1",
     "notes": "New hire - Frontend specialist"
   }'
 ```
@@ -256,6 +256,10 @@ wizard-form/
 - Data is automatically saved to the JSON files when modified
 - All APIs support standard REST operations (GET, POST, PUT, PATCH, DELETE)
 - CORS is enabled by default on json-server for local development
+- Employee IDs are auto-generated based on department (e.g., ENG-001, LEN-002, OPE-001, FUN-001)
+- Department and location autocomplete uses debounced search (500ms) with `name_like` query parameter
+- Photos are stored as base64 encoded strings in the database
+- Draft data is persisted in localStorage with 2-second debounce
 
 ## License
 
