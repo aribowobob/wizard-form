@@ -3,9 +3,9 @@
 import { useQuery } from "@tanstack/react-query";
 import { fetchDepartments } from "../fetchers/fetchDepartments";
 
-export function useQueryDepartments() {
+export function useQueryDepartments(searchQuery?: string) {
   return useQuery({
-    queryKey: ["departments"],
-    queryFn: fetchDepartments,
+    queryKey: ["departments", searchQuery],
+    queryFn: () => fetchDepartments(searchQuery),
   });
 }

@@ -3,9 +3,9 @@
 import { useQuery } from "@tanstack/react-query";
 import { fetchLocations } from "../fetchers/fetchLocations";
 
-export function useQueryLocations() {
+export function useQueryLocations(searchQuery?: string) {
   return useQuery({
-    queryKey: ["locations"],
-    queryFn: fetchLocations,
+    queryKey: ["locations", searchQuery],
+    queryFn: () => fetchLocations(searchQuery),
   });
 }

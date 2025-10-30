@@ -22,6 +22,8 @@ function WizardContent() {
     handleClearDraft,
     departmentOptions,
     roleOptions,
+    isDepartmentsLoading,
+    handleDepartmentSearch,
     detailsForm,
     photoPreview,
     hasDetailsDraftState,
@@ -31,6 +33,8 @@ function WizardContent() {
     employmentTypeOptions,
     handleStep2Back,
     handleStep2Submit,
+    isLocationsLoading,
+    handleLocationSearch,
     isSubmitting,
     isError,
     handleBackToList,
@@ -60,6 +64,8 @@ function WizardContent() {
             onClearDraft={handleClearDraft}
             departmentOptions={departmentOptions}
             roleOptions={roleOptions}
+            isDepartmentsLoading={isDepartmentsLoading}
+            onDepartmentSearch={handleDepartmentSearch}
           />
         )}
 
@@ -75,6 +81,8 @@ function WizardContent() {
             employmentTypeOptions={employmentTypeOptions}
             onBack={role === "admin" ? handleStep2Back : undefined}
             isSubmitting={isSubmitting}
+            isLocationsLoading={isLocationsLoading}
+            onLocationSearch={handleLocationSearch}
           />
         )}
       </div>

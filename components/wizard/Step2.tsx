@@ -20,7 +20,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Combobox } from "@/components/ui/combobox";
+import { ComboboxAsync } from "@/components/ui/combobox-async";
 import { EmployeeType } from "@/definitions/enums";
 
 export { type DetailsFormData } from "@/lib/hooks/useWizard";
@@ -37,6 +37,8 @@ interface Step2Props {
   employmentTypeOptions: { value: EmployeeType; label: string }[];
   onBack?: () => void;
   isSubmitting?: boolean;
+  isLocationsLoading?: boolean;
+  onLocationSearch: (search: string) => void;
 }
 
 export function Step2({
@@ -50,6 +52,8 @@ export function Step2({
   employmentTypeOptions,
   onBack,
   isSubmitting = false,
+  isLocationsLoading = false,
+  onLocationSearch,
 }: Step2Props) {
   return (
     <div className="w-full mx-auto p-6">
@@ -145,13 +149,15 @@ export function Step2({
                   Office Location <span className="text-red-500">*</span>
                 </FormLabel>
                 <FormControl>
-                  <Combobox
+                  <ComboboxAsync
                     options={locationOptions}
                     value={field.value}
                     onValueChange={field.onChange}
+                    onSearchChange={onLocationSearch}
                     placeholder="Select office location..."
                     searchPlaceholder="Search locations..."
                     emptyText="No locations found."
+                    isLoading={isLocationsLoading}
                   />
                 </FormControl>
                 <FormMessage />

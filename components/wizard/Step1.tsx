@@ -18,7 +18,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Combobox } from "@/components/ui/combobox";
+import { ComboboxAsync } from "@/components/ui/combobox-async";
 import { EmployeeRole } from "@/definitions/enums";
 
 export { type BasicInfoFormData } from "@/lib/hooks/useWizard";
@@ -32,6 +32,8 @@ interface Step1Props {
   onClearDraft: () => void;
   departmentOptions: { value: string; label: string }[];
   roleOptions: { value: EmployeeRole; label: string }[];
+  isDepartmentsLoading?: boolean;
+  onDepartmentSearch: (search: string) => void;
 }
 
 export function Step1({
@@ -41,6 +43,8 @@ export function Step1({
   onClearDraft,
   departmentOptions,
   roleOptions,
+  isDepartmentsLoading = false,
+  onDepartmentSearch,
 }: Step1Props) {
   return (
     <div className="w-full mx-auto p-6">
@@ -116,13 +120,15 @@ export function Step1({
                   Department <span className="text-red-500">*</span>
                 </FormLabel>
                 <FormControl>
-                  <Combobox
+                  <ComboboxAsync
                     options={departmentOptions}
                     value={field.value}
                     onValueChange={field.onChange}
+                    onSearchChange={onDepartmentSearch}
                     placeholder="Select department..."
                     searchPlaceholder="Search departments..."
                     emptyText="No departments found."
+                    isLoading={isDepartmentsLoading}
                   />
                 </FormControl>
                 <FormMessage />

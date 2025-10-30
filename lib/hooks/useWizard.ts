@@ -52,9 +52,13 @@ export function useWizard({
   const [photoPreview, setPhotoPreview] = useState<string>(
     initialDetailsData?.photo || ""
   );
+  const [departmentSearch, setDepartmentSearch] = useState<string>("");
+  const [locationSearch, setLocationSearch] = useState<string>("");
 
-  const { data: departments = [] } = useQueryDepartments();
-  const { data: locations = [] } = useQueryLocations();
+  const { data: departments = [], isLoading: isDepartmentsLoading } =
+    useQueryDepartments(departmentSearch);
+  const { data: locations = [], isLoading: isLocationsLoading } =
+    useQueryLocations(locationSearch);
   const { data: allEmployees = [] } = useQueryBasicInfo();
 
   const submitBasicInfo = useMutationSubmitBasicInfo();
@@ -256,6 +260,14 @@ export function useWizard({
     router.push("/");
   };
 
+  const handleDepartmentSearch = (search: string) => {
+    setDepartmentSearch(search);
+  };
+
+  const handleLocationSearch = (search: string) => {
+    setLocationSearch(search);
+  };
+
   return {
     // Step 1
     currentStep,
@@ -266,6 +278,8 @@ export function useWizard({
     handleClearDraft,
     departmentOptions,
     roleOptions,
+    isDepartmentsLoading,
+    handleDepartmentSearch,
     // Step 2
     detailsForm,
     photoPreview,
@@ -276,6 +290,8 @@ export function useWizard({
     employmentTypeOptions,
     handleStep2Back,
     handleStep2Submit,
+    isLocationsLoading,
+    handleLocationSearch,
     // Common
     isSubmitting: submitBasicInfo.isPending || submitDetails.isPending,
     isError: submitBasicInfo.isError || submitDetails.isError,
