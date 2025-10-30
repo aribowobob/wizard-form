@@ -5,11 +5,11 @@ A Next.js application with TypeScript for managing employee information using a 
 ## Tech Stack
 
 - **Next.js 16** with App Router
-- **TypeScript** - Type-safe development
-- **Tailwind CSS v4** - Utility-first styling
-- **shadcn/ui** - UI component library
-- **ESLint & Prettier** - Code quality and formatting
-- **Jest & React Testing Library** - Testing framework
+- **TypeScript**
+- **Tailwind CSS v4**
+- **shadcn/ui**
+- **ESLint & Prettier**
+- **Jest & React Testing Library**
 - **json-server** - Mock REST APIs
 
 ## Getting Started
